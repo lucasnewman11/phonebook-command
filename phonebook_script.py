@@ -1,9 +1,10 @@
 #! /usr/bin/python
 
 from sys import argv
+from os import path
 
 command = argv[1]
-PATH = '/Users/lucasamodeonewman/Desktop/Stuff/Now/Docs/phonebooks/'
+PATH = path.expanduser('~/.phonebooks/')
 default = 'friends'
 
 def open_phonebook(phonebook_name, permission,  path=PATH):
