@@ -29,6 +29,7 @@ class KVStore(object):
 class FileKVStore(KVStore):
     def __init__(self, path):
         self.path = path
+        self._maybe_create()
 
     def getall(self, query):
         data = self._data()
@@ -51,6 +52,13 @@ class FileKVStore(KVStore):
     def _persist(self, data):
         with open(self.path, 'w') as f:
             return json.dump(data, f)
+
+    def _maybe_create(self):
+        # is self.path a file with JSON in it?
+        # if not, persist an empty dictionary
+        pass
+
+
 
 
 
