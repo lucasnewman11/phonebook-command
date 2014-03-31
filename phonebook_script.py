@@ -37,19 +37,19 @@ def lookup_entry(name, phonebook_name=default):
             matching_lines += 1
     if matching_lines == 0:
         print 'No matching entries found.'
-    phonebook.close()            
-    
+    phonebook.close()
+
 # phonebook change 'Lucas Newman' '703 536 2180' friends
 def change_entry(name, number, phonebook_name=default):
     phonebook_original = open_phonebook(phonebook_name, 'r')
     phonebook_lines = phonebook_original.readlines()
     entry_update = '%s : %s \n' %  (name, number)
-    
+
     possible_entries = []
     for line_number in range(len(phonebook_lines)):
         if name in phonebook_lines[line_number]:
                 possible_entries.append((phonebook_lines[line_number], line_number))
-                
+
     if len(possible_entries) < 1:
         print 'No matching entries found.'
     elif len(possible_entries) > 1:
@@ -62,14 +62,14 @@ def change_entry(name, number, phonebook_name=default):
         for line in phonebook_lines:
             phonebook_new.write(line)
         phonebook_new.close()
-        
+
         print 'Entry updated:', entry_update
 
-# phonebook del 'Lucas Newman' friends        
+# phonebook del 'Lucas Newman' friends
 def del_entry(name, phonebook_name=default):
     phonebook_old = open_phonebook(phonebook_name, 'r')
     phonebook_lines = phonebook_old.readlines()
-    
+
     possible_entries=[]
     for line in phonebook_lines:
         if name in line:
@@ -91,7 +91,7 @@ def del_entry(name, phonebook_name=default):
 
 if command == 'create':
     create_phonebook(argv[2])
-        
+
 elif command == 'add':
     add_entry(argv[2], argv[3], argv[4])
 
