@@ -4,7 +4,6 @@ from sys import argv
 from os import path
 import json
 
-command = argv[1]
 PATH = path.expanduser('~/.phonebooks/')
 default = 'friends'
 
@@ -137,20 +136,18 @@ def del_entry(name, phonebook_name=default):
         phonebook_new.close()
         print 'Entry:', possible_entries[0], 'has been deleted.'
 
-if command == 'create':
-    create_phonebook(argv[2])
 
-elif command == 'add':
-    add_entry(argv[2], argv[3], argv[4])
+commands = {
+    'create': create_phonebook,
+    'add': add_entry,
+    'lookup': lookup_entry,
+    'change': change_entry,
+    'del': del_entry
+}
 
-elif command == 'lookup':
-    lookup_entry(argv[2], argv[3])
-
-elif command == 'change':
-    change_entry(argv[2], argv[3], argv[4])
-
-elif command == 'del':
-    del_entry(argv[2], argv[3])
-
-else:
-    print 'Command not found.'
+try:
+    commands[argv[1]](*argv[2:])
+except KeyError:
+    print "Command '{}' not found".format(argv[1])
+except TypeError:
+    print "Wrong number of args for command '{}'".format(argv[1])
