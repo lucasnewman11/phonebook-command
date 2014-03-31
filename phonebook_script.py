@@ -2,10 +2,58 @@
 
 from sys import argv
 from os import path
+import json
 
 command = argv[1]
 PATH = path.expanduser('~/.phonebooks/')
 default = 'friends'
+
+# KVStore
+#
+# Subclasses must implement the following:
+#
+#   store.getall(query) returns list of (key, value) where query is a
+#   substring of key
+#
+#   store.store(key, value) associates key with value in the store
+#
+#   store.delete(key) deletes the key, value pair in the store
+#
+class KVStore(object):
+    def getall(self, key):
+        raise NotImplementedError()
+    def store(self, key, value):
+        raise NotImplementedError()
+    def delete(self, key):
+        raise NotImplementedError()
+
+class FileKVStore(KVStore):
+    def __init__(self, path):
+        self.path = path
+
+    def getall(self, query):
+        data = self._data()
+        return [(k, v) for (k, v) in data.iteritems() if query in k]
+
+    def store(self, k, v):
+        data = self._data()
+        data[k] = v
+        self._persist(data)
+
+    def delete(self, k):
+        data = self._data()
+        del data[k]
+        self._persist(data)
+
+    def _data(self):
+        with open(self.path) as f:
+            return json.load(f)
+
+    def _persist(self, data):
+        with open(self.path, 'w') as f:
+            return json.dump(data, f)
+
+
 
 def open_phonebook(phonebook_name, permission,  path=PATH):
     file_name = phonebook_name + '.pb'
